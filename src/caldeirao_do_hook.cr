@@ -50,4 +50,5 @@ get "/" do |env|
   HookStore.get.to_json
 end
 
-Kemal.run
+port = (ENV["PORT"]? || 3000).to_i
+Kemal.run port
