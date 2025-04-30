@@ -1,0 +1,17 @@
+name: caldeirao_do_hook
+version: 0.1.0
+
+authors:
+  - breno <breno.nunes@segarante.com.br>
+
+targets:
+  caldeirao_do_hook:
+    main: src/caldeirao_do_hook.cr
+
+crystal: '>= 1.16.2'
+
+license: MIT
+
+dependencies:
+  kemal:
+    github: kemalcr/kemal
