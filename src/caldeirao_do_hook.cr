@@ -35,7 +35,7 @@ def save_hook(env, from_query = false)
     hook = Hook.new(env.params.query.to_s)
     HookStore.save(hook)
   else
-    hook = Hook.new(env.params.body.to_s)
+    hook = Hook.new(env.params.json.to_json)
     HookStore.save(hook)
   end
 end
