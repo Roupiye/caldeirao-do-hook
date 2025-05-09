@@ -47,7 +47,7 @@ delete("/*") { |env| save_hook(env); "data saved!" }
 
 get "/" do |env|
   env.response.content_type = "application/json"
-  key = env.params.query["key"] || ""
+  key = env.params.query["key"]? || ""
   HookStore.get(key).to_json
 end
 
