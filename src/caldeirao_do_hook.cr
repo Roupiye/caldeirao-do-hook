@@ -3,15 +3,15 @@ require "kemal"
 class Hook
   getter :body, :last_accessed
   @body : String
-  @last_accessed : Time | Nil
+  @last_accessed : Hash(String, Time?)
 
   def initialize(body)
     @body = body
-    @last_accessed = nil
+    @last_accessed = {} of String => Time?  # Initialize empty hash with correct type
   end
 
-  def access!
-    @last_accessed = Time.local
+  def access!(key)
+    @last_accessed[key] = Time.local
   end
 end
 
@@ -22,9 +22,9 @@ class HookStore
     @@hooks << hook
   end
 
-  def self.get
-    hooks = @@hooks.select{ |h| h.last_accessed.nil? }
-    hooks.each { |h| h.access! }
+  def self.get(key)
+    hooks = @@hooks.select{ |h| h.last_accessed[key]?.nil? }
+    hooks.each { |h| h.access!(key) }
 
     hooks.map { |h| h.body }
   end
@@ -47,7 +47,8 @@ delete("/*") { |env| save_hook(env); "data saved!" }
 
 get "/" do |env|
   env.response.content_type = "application/json"
-  HookStore.get.to_json
+  key = env.params.query["key"] || ""
+  HookStore.get(key).to_json
 end
 
 port = (ENV["PORT"]? || 3000).to_i
